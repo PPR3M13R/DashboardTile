@@ -24,6 +24,7 @@ export default function App() {
   const [synced, setSynced] = useState(false);
   const [focus, setFocus] = useState(null);
   const [full, setFull] = useState(false);
+  const [name, setName] = useState("");
 
   // ---------- save to localStorage ----------
   useEffect(() => {
@@ -46,9 +47,14 @@ export default function App() {
   // ---------- cloud sync ----------
   // 1. Track who is logged in
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setUid(data.session?.user.id ?? null));
+    const nameOf = (u) => u?.user_metadata?.full_name ?? u?.email ?? "";
+    supabase.auth.getSession().then(({ data }) => {
+      setUid(data.session?.user.id ?? null);
+      setName(nameOf(data.session?.user));
+    });
     const { data } = supabase.auth.onAuthStateChange((_e, s) => {
       setUid(s?.user.id ?? null);
+      setName(nameOf(s?.user));
       if (s?.provider_token) localStorage.setItem("gtoken", s.provider_token);
     });
     return () => data.subscription.unsubscribe();
@@ -235,7 +241,10 @@ export default function App() {
         <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>Theme: {theme === "light" ? "Light" : "Dark"}</button>
         <button onClick={() => setAnimate(!animate)}>Animation: {animate ? "On" : "Off"}</button>
         {uid ? (
-          <button onClick={() => supabase.auth.signOut()}>Sign out</button>
+          <>
+            <span>👤 {name}</span>
+            <button onClick={() => supabase.auth.signOut()}>Sign out</button>
+          </>
         ) : (
           <Login />
         )}
