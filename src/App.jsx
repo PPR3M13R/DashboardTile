@@ -25,6 +25,7 @@ export default function App() {
   const [focus, setFocus] = useState(null);
   const [full, setFull] = useState(false);
   const [name, setName] = useState("");
+  const [avatar, setAvatar] = useState("");
 
   // ---------- save to localStorage ----------
   useEffect(() => {
@@ -48,13 +49,16 @@ export default function App() {
   // 1. Track who is logged in
   useEffect(() => {
     const nameOf = (u) => u?.user_metadata?.full_name ?? u?.email ?? "";
+    const picOf = (u) => u?.user_metadata?.avatar_url ?? u?.user_metadata?.picture ?? "";
     supabase.auth.getSession().then(({ data }) => {
       setUid(data.session?.user.id ?? null);
       setName(nameOf(data.session?.user));
+      setAvatar(picOf(data.session?.user));
     });
     const { data } = supabase.auth.onAuthStateChange((_e, s) => {
       setUid(s?.user.id ?? null);
       setName(nameOf(s?.user));
+      setAvatar(picOf(s?.user));
       if (s?.provider_token) localStorage.setItem("gtoken", s.provider_token);
     });
     return () => data.subscription.unsubscribe();
@@ -242,7 +246,9 @@ export default function App() {
         <button onClick={() => setAnimate(!animate)}>Animation: {animate ? "On" : "Off"}</button>
         {uid ? (
           <>
-            <span>👤 {name}</span>
+            {avatar ? (<img className="avatar" src={avatar} alt={name} title={name} referrerPolicy="no-referrer" />) : (
+              <span className="avatar" title={name}>{name[0]?.toUpperCase()}</span>
+            )}
             <button onClick={() => supabase.auth.signOut()}>Sign out</button>
           </>
         ) : (
