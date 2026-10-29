@@ -216,9 +216,9 @@ export default function App() {
             e.target.blur();
           }}
         >
-          <option value="">+ tile</option>
-          {Object.entries(TILE_TYPES).map(([key, t]) => (
-            <option key={key} value={key}>{t.label}</option>
+          <option value="" disabled hidden>Add Tile</option>
+          {Object.entries(TILE_TYPES).map(([key, t], i) => (
+            <option key={key} value={key}>{i + 1} · {t.label}</option>
           ))}
         </select>
         <button
@@ -242,7 +242,7 @@ export default function App() {
           <Login />
         )}
         <span className="hint">
-          1-9 add · arrows = move · x = close · f = fullscreen · Enter = edit · Esc = leave · t = theme · m = animation
+          1-9 = add · arrows = move · x = close · f = fullscreen · Enter = edit · Esc = leave · t = theme · m = animation
         </span>
       </footer>
     </div>
