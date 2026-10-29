@@ -1,10 +1,9 @@
 import { supabase } from "./supabase";
-import Login from "./login";
 import { useState, useEffect } from "react";
 import { TILE_TYPES } from "./tiles";
 import "./App.css";
 import { motion, AnimatePresence, MotionConfig } from "framer-motion";
-
+import Login from "./Login";
 
 const load = (key, fallback) => {
   try {
