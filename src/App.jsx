@@ -232,9 +232,7 @@ export default function App() {
         >
           Clear
         </button>
-        <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
-          {theme === "light" ? "🌙" : "☀️"}
-        </button>
+        <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>Theme: {theme === "light" ? "Light" : "Dark"}</button>
         <button onClick={() => setAnimate(!animate)}>Animation: {animate ? "On" : "Off"}</button>
         {uid ? (
           <button onClick={() => supabase.auth.signOut()}>Sign out</button>
