@@ -26,6 +26,7 @@ export default function App() {
   const [full, setFull] = useState(false);
   const [name, setName] = useState("");
   const [avatar, setAvatar] = useState("");
+  const [settings, setSettings] = useState(false);
 
   // ---------- save to localStorage ----------
   useEffect(() => {
@@ -44,6 +45,21 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("animate", JSON.stringify(animate));
   }, [animate]);
+
+  useEffect(() => {
+    if (!settings) return;
+    const close = (e) => {
+      if (e.type === "keydown" ? e.key === "Escape" : !e.target.closest(".settings")) {
+        setSettings(false);
+      }
+    };
+    window.addEventListener("mousedown", close);
+    window.addEventListener("keydown", close);
+    return () => {
+      window.removeEventListener("mousedown", close);
+      window.removeEventListener("keydown", close);
+    };
+  }, [settings]);
 
   // ---------- cloud sync ----------
   // 1. Track who is logged in
@@ -234,6 +250,49 @@ export default function App() {
       </MotionConfig>
 
       <footer className="bar">
+        <div className="settings">
+          <button onClick={() => setSettings(!settings)}>⚙</button>
+          {settings && (
+            <div className="panel">
+              {uid ? (
+                <div className="who">
+                  {avatar ? (
+                    <img className="avatar" src={avatar} alt="" referrerPolicy="no-referrer" />
+                  ) : (
+                    <span className="avatar">{name[0]?.toUpperCase()}</span>
+                  )}
+                  <span>{name}</span>
+                </div>
+              ) : (
+                <Login />
+              )}
+              <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
+                Theme: {theme === "light" ? "Light" : "Dark"}
+              </button>
+              <button onClick={() => setAnimate(!animate)}>
+                Animation: {animate ? "On" : "Off"}
+              </button>
+              {uid && (
+                <button onClick={() => { setSettings(false); supabase.auth.signOut(); }}>
+                  Sign out
+                </button>
+              )}
+              <button
+                className="danger"
+                onClick={() => {
+                  if (confirm("Remove all tiles?")) {
+                    setTiles([]);
+                    setTree(null);
+                    setFocus(null);
+                    setSettings(false);
+                  }
+                }}
+              >
+                Clear all tiles
+              </button>
+            </div>
+          )}
+        </div>
         <select
           value=""
           onChange={(e) => {
@@ -246,29 +305,6 @@ export default function App() {
             <option key={key} value={key}>{i + 1} · {t.label}</option>
           ))}
         </select>
-        <button
-          onClick={() => {
-            if (confirm("Remove all tiles?")) {
-              setTiles([]);
-              setTree(null);
-              setFocus(null);
-            }
-          }}
-        >
-          Clear
-        </button>
-        <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>Theme: {theme === "light" ? "Light" : "Dark"}</button>
-        <button onClick={() => setAnimate(!animate)}>Animation: {animate ? "On" : "Off"}</button>
-        {uid ? (
-          <>
-            {avatar ? (<img className="avatar" src={avatar} alt={name} title={name} referrerPolicy="no-referrer" />) : (
-              <span className="avatar" title={name}>{name[0]?.toUpperCase()}</span>
-            )}
-            <button onClick={() => supabase.auth.signOut()}>Sign out</button>
-          </>
-        ) : (
-          <Login />
-        )}
         <span className="hint">
           1-9 = add · arrows = move · x = close · f = fullscreen · Enter = edit · Esc = leave · t = theme · m = animation
         </span>

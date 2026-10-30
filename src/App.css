@@ -83,15 +83,17 @@ select option { background: var(--bg); color: var(--fg); }
   object-fit: cover; display: grid; place-items: center;
   background: var(--accent); color: #fff; font-size: .75rem;
 }
-.user { position: relative; }
-.userbtn { display: flex; align-items: center; gap: .4rem; padding: 2px 8px 2px 3px; }
-.menu {
+.settings { position: relative; }
+.panel {
   position: absolute; bottom: calc(100% + 6px); left: 0; z-index: 20;
-  min-width: 100%; padding: 4px;
+  min-width: 200px; padding: 6px;
+  display: flex; flex-direction: column; gap: 4px;
   background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
 }
-.menu button { width: 100%; text-align: left; border: none; }
-.menu button:hover { background: var(--border); }
+.panel button { width: 100%; text-align: left; border: none; }
+.panel button:hover { background: var(--border); }
+.panel .danger { color: #e5484d; }
+.who { display: flex; align-items: center; gap: .5rem; padding: 4px 8px; }
 
 /* ---------- TimeTile ---------- */
 .time {
