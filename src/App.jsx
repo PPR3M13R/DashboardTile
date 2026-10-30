@@ -129,7 +129,7 @@ export default function App() {
   };
 
   const updateTile = (id, data) =>
-    setTiles(tiles.map((t) => (t.id === id ? { ...t, data: { ...t.data, ...data } } : t)));
+    setTiles((prev) => prev.map((t) => (t.id === id ? { ...t, data: { ...t.data, ...data } } : t)));
 
   // ---------- keyboard ----------
   useEffect(() => {

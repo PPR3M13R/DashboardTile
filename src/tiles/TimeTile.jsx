@@ -37,6 +37,7 @@ export default function TimeTile({ data, onChange }) {
   const timerSecs = data.timerSecs ?? (data.timerLen ?? 5) * 60; // old tiles were in minutes
   const [now, setNow] = useState(Date.now());
   const fired = useRef(null);
+  const box = useRef({});
 
   useEffect(() => {
     const id = setInterval(() => setNow(Date.now()), 100);
@@ -72,6 +73,7 @@ export default function TimeTile({ data, onChange }) {
   const unit = (u, val, label) => (
     <span className="unit">
       <input
+        ref={(el) => (box.current[u] = el)}
         type="number" min="0" key={u + val} defaultValue={val}
         disabled={!!timerEnd}
         onBlur={(e) => setLen(u, e.target.value)}
@@ -121,8 +123,11 @@ export default function TimeTile({ data, onChange }) {
             ) : (
               <button
                 onClick={() => {
-                  audio(); // unlocks sound, browsers need a click first
-                  onChange({ timerEnd: Date.now() + (done || left === 0 ? timerSecs * 1000 : left), timerLeft: null });
+                  audio(); // unlocks sound
+                  const val = (k) => Math.max(0, Math.floor(+box.current[k]?.value) || 0);
+                  const typed = val("h") * 3600 + val("m") * 60 + val("s") || 1;
+                  const ms = typed !== timerSecs || done || left === 0 ? typed * 1000 : left;
+                  onChange({ timerSecs: typed, timerEnd: Date.now() + ms, timerLeft: null });
                 }}
               >
                 Start
