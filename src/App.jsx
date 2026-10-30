@@ -183,7 +183,7 @@ export default function App() {
           updateTile(cur, { view: NEXT_VIEW[tile.data.view ?? "auto"] });
         }
       }
-      else if (k === "Enter") {
+      else if ((k === "Enter" || k === "i") && e.target.tagName !== "BUTTON") {
         e.preventDefault();
         document
           .querySelector(`[data-id="${cur}"] textarea, [data-id="${cur}"] input`)
@@ -193,6 +193,12 @@ export default function App() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   });
+
+  useEffect(() => {
+    if (!cur) return;
+    const el = document.querySelector(`[data-id="${cur}"]`);
+    if (el && !el.contains(document.activeElement)) el.focus({ preventScroll: true });
+  }, [cur]);
 
   // ---------- render ----------
   const rects = getRects(layout);
@@ -227,6 +233,7 @@ export default function App() {
                   key={tile.id}
                   data-id={tile.id}
                   className="slot"
+                  tabIndex={-1}
                   initial={{ opacity: 0, scale: 0.9, ...pos(r) }}
                   animate={{ opacity: hidden ? 0 : 1, scale: 1, ...pos(r) }}
                   exit={{ opacity: 0, scale: 0.9 }}
@@ -235,6 +242,7 @@ export default function App() {
                     pointerEvents: hidden ? "none" : "auto",
                   }}
                   onMouseDown={() => setFocus(tile.id)}
+                  onFocus={() => setFocus(tile.id)}
                 >
                   <div
                     className={"tile" + (isCur ? " focus" : "")}

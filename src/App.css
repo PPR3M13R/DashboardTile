@@ -184,3 +184,5 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
   .tile[data-view="auto"] :is(.time .tabs, .time .row:nth-child(4), .time select) { display: none; }
 }
 @container (max-height: 150px) { .tile[data-view="auto"] .cal-head { display: none; } }
+
+.slot:focus { outline: none; }
