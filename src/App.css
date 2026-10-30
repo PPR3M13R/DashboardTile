@@ -61,3 +61,14 @@ select option { background: var(--bg); color: var(--fg); }
   object-fit: cover; display: grid; place-items: center;
   background: var(--accent); color: #fff; font-size: .75rem;
 }
+
+/* TimeTile */
+.time { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: .6rem; text-align: center; }
+.time .big { font-size: clamp(2rem, 9vw, 4.5rem); font-weight: 200; font-variant-numeric: tabular-nums; line-height: 1; }
+.time .big.done { color: var(--accent); }
+.time .sub { opacity: .6; font-size: .85rem; }
+.time .row { display: flex; gap: .5rem; align-items: center; }
+.time .tabs { display: flex; gap: .25rem; }
+.time .tab { border: none; background: none; opacity: .45; padding: 2px 8px; }
+.time .tab.on { opacity: 1; border-bottom: 1px solid var(--accent); border-radius: 0; }
+.time .unit { display: flex; align-items: center; gap: 2px; }
