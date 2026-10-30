@@ -163,3 +163,16 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
 
 @container (max-height: 260px) { .wx-days { display: none; } }
 @container (max-height: 170px) { .wx-stats, .wx-head { display: none; } }
+
+/* ---------- CalendarTile ---------- */
+.cal { display: flex; flex-direction: column; gap: .8rem; text-align: left; }
+.cal-empty { min-height: 100%; justify-content: safe center; align-items: safe center; text-align: center; gap: .5rem; }
+.cal-empty .sub { opacity: .6; font-size: .85rem; }
+.cal-head { font-size: .75rem; opacity: .5; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 2px; }
+.cal-ev { display: flex; gap: .75rem; align-items: baseline; padding: 2px 0; }
+.cal-time { flex: 0 0 4.5rem; font-size: .8rem; opacity: .5; font-variant-numeric: tabular-nums; }
+.cal-title { overflow-wrap: anywhere; }
+.cal-ev.now .cal-time { color: var(--accent); opacity: 1; }
+.cal-ev.now .cal-title { border-left: 2px solid var(--accent); padding-left: .5rem; margin-left: -.5rem; }
+
+@container (max-height: 150px) { .cal-head { display: none; } }
