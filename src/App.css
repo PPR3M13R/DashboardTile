@@ -7,58 +7,8 @@ body {
   background: var(--bg); color: var(--fg);
   transition: background .3s, color .3s;
 }
-.screen { position: fixed; inset: 0 0 34px 0; }
-.slot { position: absolute; padding: 6px; box-sizing: border-box; }
-.tile {
-  position: relative; height: 100%; box-sizing: border-box; padding: 1rem; overflow: auto;
-  border: 2px solid var(--border); border-radius: 10px; transition: border-color .2s;
-}
-.tile.focus { border-color: var(--accent); }
-.tile textarea {
-  display: block;
-  width: 100%; height: 100%; padding: 0;
-  border: none; outline: none; resize: none;
-  background: transparent; color: inherit; font: inherit;
-}
-.x {
-  position: absolute; top: 4px; right: 6px;
-  padding: 0 4px; border: none; background: none;
-  color: inherit; opacity: .5;
-}
-.x:hover { opacity: 1; }
 
-.fs {
-  position: absolute; top: 4px; right: 30px;
-  padding: 0 4px; border: none; background: none;
-  color: inherit; opacity: .5;
-}
-.fs:hover { opacity: 1; }
-
-@media (pointer: coarse) {
-  .x, .fs { font-size: 1.2rem; padding: 4px 8px; opacity: .7; }
-  .fs { right: 38px; }
-  .hint { display: none; }
-}
-
-.bar {
-  position: fixed; left: 0; right: 0; bottom: 0; height: 34px; box-sizing: border-box;
-  display: flex; align-items: center; gap: .5rem; padding: 0 .5rem;
-  border-top: 1px solid var(--border); background: var(--bg); font-size: .8rem;
-}
-.hint { margin-left: auto; opacity: .6; white-space: nowrap; overflow: hidden; }
-.empty { position: absolute; inset: 0; display: grid; place-items: center; opacity: .5; }
-.tile { overflow: auto; scrollbar-width: thin; }
-.tile > * { min-width: 0; }
-.tile h2, .tile small, .tile p { overflow-wrap: anywhere; }
-.tile h2 { font-size: clamp(1rem, 4vw, 1.6rem); }
-.tile img { max-width: 100%; height: auto; object-fit: contain; }
-.tile pre { white-space: pre-wrap; overflow: auto; }
-.slot { container-type: size; }
-.time .big { font-size: clamp(1.5rem, 18cqmin, 4.5rem); }
-@container (max-height: 160px) {
-  .time .tabs, .time .row:last-child, .time select { display: none; }
-}
-
+/* ---------- controls ---------- */
 button, select, input {
   font: inherit;
   color: var(--fg);
@@ -75,22 +25,97 @@ button:focus-visible, select:focus-visible, input:focus-visible {
   outline-offset: 1px;
 }
 input { cursor: text; }
-
 select option { background: var(--bg); color: var(--fg); }
 
+/* ---------- layout ---------- */
+.screen { position: fixed; inset: 0 0 34px 0; }
+.slot { position: absolute; padding: 6px; box-sizing: border-box; container-type: size; }
+.tile {
+  position: relative; height: 100%; box-sizing: border-box; padding: 1rem;
+  overflow: hidden;
+  border: 2px solid var(--border); border-radius: 10px; transition: border-color .2s;
+}
+.body {
+  height: 100%; overflow: auto; scrollbar-width: thin;
+}
+.body { padding-top: 12px; }
+.tile.focus { border-color: var(--accent); }
+.tile > * { min-width: 0; }
+.tile h2, .tile small, .tile p { overflow-wrap: anywhere; }
+.tile h2 { font-size: clamp(1rem, 4vw, 1.6rem); }
+.tile img { max-width: 100%; height: auto; object-fit: contain; }
+.tile pre { white-space: pre-wrap; overflow: auto; }
+.tile textarea {
+  display: block; width: 100%; height: 100%; padding: 0;
+  border: none; outline: none; resize: none;
+  background: transparent; color: inherit; font: inherit;
+}
+.empty { position: absolute; inset: 0; display: grid; place-items: safe center; opacity: .5; }
+
+/* ---------- tile buttons ---------- */
+.x, .fs {
+  position: absolute; top: 4px;
+  padding: 0 4px; border: none; background: none;
+  color: inherit; opacity: .5;
+}
+.x { right: 6px; }
+.fs { right: 30px; }
+.x:hover, .fs:hover { opacity: 1; }
+
+@media (pointer: coarse) {
+  .x, .fs { font-size: 1.2rem; padding: 4px 8px; opacity: .7; }
+  .fs { right: 38px; }
+  .hint { display: none; }
+}
+
+/* ---------- footer ---------- */
+.bar {
+  position: fixed; left: 0; right: 0; bottom: 0; height: 34px; box-sizing: border-box;
+  display: flex; align-items: center; gap: .5rem; padding: 0 .5rem;
+  border-top: 1px solid var(--border); background: var(--bg); font-size: .8rem;
+}
+.hint {
+  margin-left: auto; min-width: 0; opacity: .6;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 .avatar {
   width: 22px; height: 22px; border-radius: 50%;
   object-fit: cover; display: grid; place-items: center;
   background: var(--accent); color: #fff; font-size: .75rem;
 }
+.user { position: relative; }
+.userbtn { display: flex; align-items: center; gap: .4rem; padding: 2px 8px 2px 3px; }
+.menu {
+  position: absolute; bottom: calc(100% + 6px); left: 0; z-index: 20;
+  min-width: 100%; padding: 4px;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+}
+.menu button { width: 100%; text-align: left; border: none; }
+.menu button:hover { background: var(--border); }
 
-/* TimeTile */
-.time { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: .6rem; text-align: center; }
-.time .big { font-size: clamp(2rem, 9vw, 4.5rem); font-weight: 200; font-variant-numeric: tabular-nums; line-height: 1; }
+/* ---------- TimeTile ---------- */
+.time {
+  min-height: 100%; width: max-content; min-width: 100%;
+  box-sizing: border-box;
+  display: flex; flex-direction: column;
+  justify-content: safe center;
+  align-items: safe center;
+  gap: .6rem; text-align: center;
+}
+.time .big {
+  font-size: clamp(1.5rem, 18cqmin, 4.5rem);
+  font-weight: 200; font-variant-numeric: tabular-nums; line-height: 1;
+  white-space: nowrap;
+}
 .time .big.done { color: var(--accent); }
-.time .sub { opacity: .6; font-size: .85rem; }
-.time .row { display: flex; gap: .5rem; align-items: center; }
+.time .sub { opacity: .6; font-size: .85rem; white-space: nowrap; }
+.time .row { display: flex; gap: .5rem; align-items: center; justify-content: center; }
 .time .tabs { display: flex; gap: .25rem; }
 .time .tab { border: none; background: none; opacity: .45; padding: 2px 8px; }
 .time .tab.on { opacity: 1; border-bottom: 1px solid var(--accent); border-radius: 0; }
 .time .unit { display: flex; align-items: center; gap: 2px; }
+
+/* small tiles: hide extras, keep the main value and its buttons */
+@container (max-height: 160px) {
+  .time .tabs, .time .row:nth-child(4), .time select { display: none; }
+}
