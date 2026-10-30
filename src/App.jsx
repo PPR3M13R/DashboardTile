@@ -202,6 +202,7 @@ export default function App() {
                   key={tile.id}
                   data-id={tile.id}
                   className="slot"
+                  onDoubleClick={() => { setFocus(tile.id); setFull(full && isCur ? false : true); }}
                   initial={{ opacity: 0, scale: 0.9, ...pos(r) }}
                   animate={{ opacity: hidden ? 0 : 1, scale: 1, ...pos(r) }}
                   exit={{ opacity: 0, scale: 0.9 }}
@@ -212,6 +213,15 @@ export default function App() {
                   onMouseDown={() => setFocus(tile.id)}
                 >
                   <div className={"tile" + (isCur ? " focus" : "")}>
+                    <button
+                      className="fs"
+                      onClick={() => {
+                        setFocus(tile.id);
+                        setFull(full && isCur ? false : true);
+                      }}
+                    >
+                      {full && isCur ? "🗗" : "⛶"}
+                    </button>
                     <button className="x" onClick={() => removeTile(tile.id)}>✕</button>
                     <Tile data={tile.data} onChange={(d) => updateTile(tile.id, d)} />
                   </div>

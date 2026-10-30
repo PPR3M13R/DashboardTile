@@ -27,6 +27,19 @@ body {
 }
 .x:hover { opacity: 1; }
 
+.fs {
+  position: absolute; top: 4px; right: 30px;
+  padding: 0 4px; border: none; background: none;
+  color: inherit; opacity: .5;
+}
+.fs:hover { opacity: 1; }
+
+@media (pointer: coarse) {
+  .x, .fs { font-size: 1.2rem; padding: 4px 8px; opacity: .7; }
+  .fs { right: 38px; }
+  .hint { display: none; }
+}
+
 .bar {
   position: fixed; left: 0; right: 0; bottom: 0; height: 34px; box-sizing: border-box;
   display: flex; align-items: center; gap: .5rem; padding: 0 .5rem;
@@ -34,8 +47,17 @@ body {
 }
 .hint { margin-left: auto; opacity: .6; white-space: nowrap; overflow: hidden; }
 .empty { position: absolute; inset: 0; display: grid; place-items: center; opacity: .5; }
-.tile { overflow: hidden; }
-.tile:has(.scroll) { overflow: auto; }
+.tile { overflow: auto; scrollbar-width: thin; }
+.tile > * { min-width: 0; }
+.tile h2, .tile small, .tile p { overflow-wrap: anywhere; }
+.tile h2 { font-size: clamp(1rem, 4vw, 1.6rem); }
+.tile img { max-width: 100%; height: auto; object-fit: contain; }
+.tile pre { white-space: pre-wrap; overflow: auto; }
+.slot { container-type: size; }
+.time .big { font-size: clamp(1.5rem, 18cqmin, 4.5rem); }
+@container (max-height: 160px) {
+  .time .tabs, .time .row:last-child, .time select { display: none; }
+}
 
 button, select, input {
   font: inherit;
