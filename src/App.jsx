@@ -14,6 +14,9 @@ const load = (key, fallback) => {
   }
 };
 
+const VIEW_TYPES = ["time", "weather", "calendar"];
+const NEXT_VIEW = { auto: "min", min: "full", full: "auto" };
+
 export default function App() {
   // ---------- state ----------
   const [tiles, setTiles] = useState(() => load("tiles", []));
@@ -174,6 +177,12 @@ export default function App() {
       else if (k.toLowerCase() === "f") setFull(!full);
       else if (k.toLowerCase() === "t") setTheme(theme === "light" ? "dark" : "light");
       else if (k.toLowerCase() === "m") setAnimate(!animate);
+      else if (k.toLowerCase() === "v" && cur) {
+        const tile = tiles.find((t) => t.id === cur);
+        if (VIEW_TYPES.includes(tile?.type)) {
+          updateTile(cur, { view: NEXT_VIEW[tile.data.view ?? "auto"] });
+        }
+      }
       else if (k === "Enter") {
         e.preventDefault();
         document
@@ -227,7 +236,23 @@ export default function App() {
                   }}
                   onMouseDown={() => setFocus(tile.id)}
                 >
-                  <div className={"tile" + (isCur ? " focus" : "")}>
+                  <div
+                    className={"tile" + (isCur ? " focus" : "")}
+                    data-view={tile.data.view ?? "auto"}
+                  >
+                    {VIEW_TYPES.includes(tile.type) && (
+                      <button
+                        className="vw"
+                        title="Change view"
+                        onClick={() =>
+                          updateTile(tile.id, {
+                            view: NEXT_VIEW[tile.data.view ?? "auto"],
+                          })
+                        }
+                      >
+                        {tile.data.view ?? "auto"}
+                      </button>
+                    )}
                     <button
                       className="fs"
                       onClick={() => {
@@ -316,7 +341,7 @@ export default function App() {
 
         {/* Keyboard shortcut reminder */}
         <span className="hint">
-          1-9 = add · arrows = move · x = close · f = fullscreen · Enter = edit · Esc = leave · t = theme · m = animation
+          1-9 = add · arrows = move · x = close · f = fullscreen · v = view · Enter = edit · Esc = leave · t = theme · m = animation
         </span>
       </footer>
     </div>
