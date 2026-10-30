@@ -75,7 +75,7 @@ export default function App() {
       .maybeSingle()
       .then(({ data }) => {
         const d = data?.data;
-        if (d) {
+        if (d && localStorage.getItem("dirty") !== "1") {
           setTiles(d.tiles ?? []);
           setTheme(d.theme ?? "light");
           setAnimate(d.animate ?? true);
@@ -88,6 +88,7 @@ export default function App() {
   // 3. Save to the cloud 0.8s after any change
   useEffect(() => {
     if (!uid || !synced) return;
+    localStorage.setItem("dirty", "1"); // unsaved until the cloud confirms
     const id = setTimeout(() => {
       supabase
         .from("dashboards")
@@ -96,7 +97,10 @@ export default function App() {
           data: { tiles, theme, animate, tree },
           updated_at: new Date().toISOString(),
         })
-        .then(({ error }) => error && console.error("Save failed:", error));
+        .then(({ error }) => {
+          if (error) console.error("Save failed:", error);
+          else localStorage.setItem("dirty", "0");
+        });
     }, 800);
     return () => clearTimeout(id);
   }, [tiles, theme, animate, tree, uid, synced]);
