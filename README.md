@@ -1,16 +1,32 @@
-# React + Vite
+# DashboardTile
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A minimal, dashboard of tiles. Tiles split the screen like Hyprland's dwindle layout, sync across devices through Supabase, and everything is saved automatically.
 
-Currently, two official plugins are available:
+**Live:** https://dashboardtile.vercel.app
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- **Tiling layout:** a new tile splits the focused tile 50/50 (side by side if it is wider than tall, otherwise stacked). Closing a tile gives its space to its sibling.
+- **Tiles:** Note, Time (clock with timezone, timer with beep, stopwatch), Weather (Open-Meteo, city search, °C/°F), Calendar (Google, read-only), and a generic API tile.
+- **View modes:** Time, Weather and Calendar tiles switch between auto, min and full.
+- **Theme and animations:** light/dark mode and a Framer Motion toggle.
+- **Persistence:** saved in `localStorage`, and synced to Supabase after Google sign-in.
+- **Keyboard and touch:** every action has a shortcut, and the buttons work on a phone.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Shortcuts
 
-## Expanding the Oxlint configuration
+| Key | Action |
+|---|---|
+| `1`-`9` | Add a tile (order of the tile registry) |
+| Arrow keys | Move focus between tiles |
+| `x` | Close the focused tile |
+| `f` | Fullscreen the focused tile |
+| `v` | Cycle view: auto / min / full |
+| `Enter` or `i` | Edit the focused tile |
+| `Esc` | Leave a text box or close a menu |
+| `t` | Toggle theme |
+| `m` | Toggle animations |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Tech stack
+
+Vite, React, Framer Motion, Supabase (auth and database), Vercel (hosting).
