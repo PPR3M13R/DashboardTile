@@ -250,8 +250,9 @@ export default function App() {
       </MotionConfig>
 
       <footer className="bar">
+        {/* Account and dashboard settings */}
         <div className="settings">
-          <button onClick={() => setSettings(!settings)}>⚙</button>
+          <button onClick={() => setSettings(!settings)}>⚙ Settings</button>
           {settings && (
             <div className="panel">
               {uid ? (
@@ -273,7 +274,12 @@ export default function App() {
                 Animation: {animate ? "On" : "Off"}
               </button>
               {uid && (
-                <button onClick={() => { setSettings(false); supabase.auth.signOut(); }}>
+                <button
+                  onClick={() => {
+                    setSettings(false);
+                    supabase.auth.signOut();
+                  }}
+                >
                   Sign out
                 </button>
               )}
@@ -293,6 +299,7 @@ export default function App() {
             </div>
           )}
         </div>
+        {/* Add tiles */}
         <select
           value=""
           onChange={(e) => {
@@ -305,6 +312,9 @@ export default function App() {
             <option key={key} value={key}>{i + 1} · {t.label}</option>
           ))}
         </select>
+
+
+        {/* Keyboard shortcut reminder */}
         <span className="hint">
           1-9 = add · arrows = move · x = close · f = fullscreen · Enter = edit · Esc = leave · t = theme · m = animation
         </span>

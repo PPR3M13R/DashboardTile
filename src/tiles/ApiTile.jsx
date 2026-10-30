@@ -7,7 +7,7 @@ const isImg = (v) =>
   typeof v === "string" && /^https?:\/\/\S+\.(gif|png|jpe?g|webp)(\?\S*)?$/i.test(v);
 
 export default function ApiTile({ data, onChange }) {
-  const { url = "", path = "", label = "" } = data;
+  const { url = "", path = "", label = "", hide = !!data.url } = data;
   const [value, setValue] = useState(null);
   const [error, setError] = useState("");
 
@@ -41,9 +41,20 @@ export default function ApiTile({ data, onChange }) {
 
   return (
     <div>
-      {field("label", "Label (optional)", label)}
-      {field("url", "https://api...", url)}
-      {field("path", "Field, e.g. current.temperature_2m", path)}
+      <button
+        className="edit"
+        onClick={() => onChange({ hide: !hide })}
+        title={hide ? "Show settings" : "Hide settings"}
+      >
+        {hide ? "⚙ Edit" : "▲ Hide"}
+      </button>
+      {!hide && (
+        <>
+          {field("label", "Label (optional)", label)}
+          {field("url", "https://api...", url)}
+          {field("path", "Field, e.g. current.temperature_2m", path)}
+        </>
+      )}
       {label && <small>{label}</small>}
       {error ? (
         <h2>{error}</h2>
