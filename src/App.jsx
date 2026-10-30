@@ -143,18 +143,18 @@ export default function App() {
         ArrowUp: "up",
         ArrowDown: "down",
       };
-
+      
       if (dirs[k]) {
         e.preventDefault();
         const to = neighbor(getRects(layout), cur, dirs[k]);
         if (to) setFocus(to);
       } 
       else if (/^[1-9]$/.test(k) && types[k - 1]) addTile(types[k - 1]);
-      else if (k === "x" && cur) removeTile(cur);
-      else if (k === "f") setFull(!full);
-      else if (k === "t") setTheme(theme === "light" ? "dark" : "light");
-      else if (k === "m") setAnimate(!animate);
-      else if (k === "Enter" || k === "i") {
+      else if (k.toLowerCase() === "x" && cur) removeTile(cur);
+      else if (k.toLowerCase() === "f") setFull(!full);
+      else if (k.toLowerCase() === "t") setTheme(theme === "light" ? "dark" : "light");
+      else if (k.toLowerCase() === "m") setAnimate(!animate);
+      else if (k === "Enter") {
         e.preventDefault();
         document
           .querySelector(`[data-id="${cur}"] textarea, [data-id="${cur}"] input`)
